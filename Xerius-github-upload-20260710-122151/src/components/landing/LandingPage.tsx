@@ -3,31 +3,68 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const navLinks = [
-  ["Pronostics", "#pronostics"],
-  ["Analyses", "#analyses"],
+  ["Accueil", "#"],
   ["Matchs", "#matchs"],
-  ["Pricing", "#pricing"],
-  ["FAQ", "#faq"],
+  ["Équipes", "#modules"],
+  ["Classements", "#resultats"],
+  ["Tournois", "#analyses"],
+  ["Actualités", "#faq"],
 ];
 
-const tickerItems = [
-  "Pronostics expliques",
-  "Analyses post-match",
-  "Heatmaps CS2",
-  "Score de confiance",
-  "Risque visible",
-  "Portefeuille de decisions",
-  "Live & casts",
-  "Discord premium",
-  "Aucun depot",
-  "Aucun retrait",
+const upcomingMatches = [
+  {
+    first: { name: "FaZe", mark: "FZ", tone: "red" },
+    second: { name: "NAVI", mark: "NV", tone: "yellow" },
+    day: "Auj.",
+    time: "17:00",
+  },
+  {
+    first: { name: "G2", mark: "G2", tone: "white" },
+    second: { name: "Vitality", mark: "VT", tone: "yellow" },
+    day: "Auj.",
+    time: "20:30",
+  },
+  {
+    first: { name: "ENCE", mark: "EN", tone: "gold" },
+    second: { name: "MOUZ", mark: "MZ", tone: "red" },
+    day: "Demain",
+    time: "15:00",
+  },
 ];
 
 const problems = [
-  ["Tu ouvres trop d'onglets", "Stream, HLTV, Discord, stats, tweets, calendrier : tout existe, mais rien n'arrive dans le bon ordre quand le match commence."],
-  ["Le score ne raconte pas la game", "Un 13-9 ne dit pas quelle eco a casse, quel side a pris l'avantage, ni pourquoi une map a soudainement bascule."],
-  ["Les signaux arrivent trop tard", "Quand tout le monde parle deja du spot, tu n'es plus en avance. Il te faut le contexte avant que le bruit explose."],
-  ["Tu ne sais pas quoi garder", "Forme recente, map pool, line-up, cote fort, momentum : les pieces sont la, mais elles ne forment pas encore une lecture claire."],
+  {
+    code: "01",
+    category: "Sources dispersées",
+    title: ["Tu ouvres", "trop d’onglets"],
+    copy: "Stream, HLTV, Discord, stats, tweets, calendrier : tout existe, mais rien n'arrive dans le bon ordre quand le match commence.",
+    status: "Signal à clarifier",
+    image: "/assets/xerius/card1.PNG",
+  },
+  {
+    code: "02",
+    category: "Contexte incomplet",
+    title: ["Le score ne", "raconte pas la", "game"],
+    copy: "Un 13-9 ne dit pas quelle éco a cassé, quel side a pris l'avantage, ni pourquoi une map a soudainement basculé.",
+    status: "Signal à clarifier",
+    image: "/assets/xerius/card2.PNG",
+  },
+  {
+    code: "03",
+    category: "Signal retardé",
+    title: ["Les signaux", "arrivent trop tard"],
+    copy: "Quand tout le monde parle déjà du spot, tu n'es plus en avance. Il te faut le contexte avant que le bruit explose.",
+    status: "Signal à clarifier",
+    image: "/assets/xerius/card3.PNG",
+  },
+  {
+    code: "04",
+    category: "Décision brouillée",
+    title: ["Tu ne sais pas", "quoi garder"],
+    copy: "Forme récente, map pool, line-up, côté fort, momentum : les pièces sont là, mais elles ne forment pas encore une lecture claire.",
+    status: "Priorité floue",
+    image: "/assets/xerius/card4.PNG",
+  },
 ];
 
 const testimonials = [
@@ -183,62 +220,146 @@ function Brand() {
   );
 }
 
-function NavBar() {
+function HeroArrow() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
-      <nav className="mx-auto flex h-[64px] w-full max-w-[1240px] items-center justify-between gap-6 rounded-[18px] border border-white/[0.1] bg-[#050B16]/42 px-5 shadow-[0_18px_55px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md md:px-7">
-        <Brand />
-        <div className="hidden items-center gap-8 lg:flex">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h13M14 7l5 5-5 5" />
+    </svg>
+  );
+}
+
+function HeroSearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m16 16 4 4" />
+    </svg>
+  );
+}
+
+function HeroBrand() {
+  return (
+    <a className="cs-hero-brand" href="#" aria-label="Xerius — accueil">
+      <span className="cs-hero-brand-word" aria-hidden="true">
+        <span className="cs-hero-brand-x">X</span>
+        <span className="cs-hero-brand-rest">ERIUS</span>
+      </span>
+    </a>
+  );
+}
+
+function NavBar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <header className="cs-hero-header">
+      <div className="cs-hero-container cs-hero-header-grid">
+        <HeroBrand />
+        <nav className="cs-hero-desktop-nav" aria-label="Navigation principale">
           {navLinks.map(([label, href]) => (
-            <a key={label} href={href} className="text-sm font-semibold text-[#9FB0CA] transition hover:text-white">
-              {label}
-            </a>
+            <a key={label} href={href} className={label === "Accueil" ? "active" : undefined}>{label}</a>
           ))}
+        </nav>
+        <div className="cs-hero-header-actions">
+          <button className="cs-hero-search" type="button" aria-label="Rechercher"><HeroSearchIcon /></button>
+          <a className="cs-hero-login" href="#login">Se connecter</a>
+          <button
+            className="cs-hero-menu-button"
+            type="button"
+            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={menuOpen}
+            aria-controls="cs-hero-mobile-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span />
+            <span />
+          </button>
         </div>
-        <div className="flex items-center gap-3">
-          <a href="#login" className="hidden text-sm font-semibold text-[#9FB0CA] transition hover:text-white sm:block">
-            Se connecter
-          </a>
-          <ButtonLink>S’inscrire</ButtonLink>
+      </div>
+      <nav
+        id="cs-hero-mobile-navigation"
+        className={`cs-hero-mobile-nav ${menuOpen ? "is-open" : ""}`}
+        aria-label="Navigation mobile"
+      >
+        <div className="cs-hero-container">
+          {navLinks.map(([label, href]) => (
+            <a key={label} href={href} className={label === "Accueil" ? "active" : undefined}>{label}</a>
+          ))}
+          <a className="cs-hero-mobile-login" href="#login">Se connecter</a>
         </div>
       </nav>
     </header>
   );
 }
 
+function HeroAction({ children, secondary = false, href }: Readonly<{ children: ReactNode; secondary?: boolean; href: string }>) {
+  return (
+    <a className={`cs-hero-action ${secondary ? "secondary" : "primary"}`} href={href}>
+      <span>{children}</span>
+      <HeroArrow />
+    </a>
+  );
+}
+
 function Hero() {
   return (
-    <section className="section-bg bg-hero relative overflow-hidden">
-      <div className="x-container relative flex min-h-[860px] items-center py-20 lg:py-24">
-        <div className="max-w-[760px]">
-          <h1 className="max-w-[760px] font-heading text-[clamp(4rem,8vw,6.4rem)] font-black leading-[0.86] tracking-[-0.055em] text-white">
-            Toute l’analyse CS2 au même endroit.
+    <section className="cs-hero-shell bg-hero" aria-labelledby="cs-hero-title">
+      <div className="cs-hero-background" aria-hidden="true" />
+      <div className="cs-hero-overlay-horizontal" aria-hidden="true" />
+      <div className="cs-hero-overlay-vertical" aria-hidden="true" />
+      <div className="cs-hero-main">
+        <div className="cs-hero-container cs-hero-content">
+          <p className="cs-hero-kicker">Votre hub esport CS:GO</p>
+          <h1 id="cs-hero-title">
+            <span>Tous les <em>matchs.</em></span>
+            <span>Tous les <em>résultats.</em></span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-[#D2DEEF]">
-            Pronostics, statistiques, live, actualités, portefeuille et Discord réunis dans une interface pensée pour lire le match avant, pendant et après.
+          <p className="cs-hero-copy">
+            Suivez tous les matchs, résultats et statistiques<br className="cs-hero-desktop-break" /> de la scène compétitive CS:GO.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <ButtonLink>S’inscrire</ButtonLink>
-            <ButtonLink variant="secondary" href="#modules">Voir les modules</ButtonLink>
+          <div className="cs-hero-actions">
+            <HeroAction href="#matchs">Voir les matchs</HeroAction>
+            <HeroAction href="#resultats" secondary>Voir les résultats</HeroAction>
           </div>
         </div>
+      </div>
+      <div className="cs-hero-side-marker" aria-hidden="true">
+        <i className="marker-dot" />
+        <i className="marker-line marker-line-light" />
+        <span>CSGO Esport</span>
+        <i className="marker-line marker-line-orange" />
       </div>
       <TickerStrip />
     </section>
   );
 }
 
+function TeamLogo({ mark, tone }: Readonly<{ mark: string; tone: string }>) {
+  return <span className={`cs-team-logo ${tone}`} aria-hidden="true">{mark}</span>;
+}
+
+function MatchCard({ match }: Readonly<{ match: (typeof upcomingMatches)[number] }>) {
+  return (
+    <article className="cs-match-card" aria-label={`${match.first.name} contre ${match.second.name}, ${match.day} à ${match.time}`}>
+      <div className="cs-match-teams">
+        <div className="cs-team"><TeamLogo mark={match.first.mark} tone={match.first.tone} /><span>{match.first.name}</span></div>
+        <span className="cs-versus">VS</span>
+        <div className="cs-team cs-team-away"><TeamLogo mark={match.second.mark} tone={match.second.tone} /><span>{match.second.name}</span></div>
+      </div>
+      <time className="cs-match-time"><span>{match.day}</span><strong>{match.time}</strong></time>
+    </article>
+  );
+}
+
 function TickerStrip() {
   return (
-    <div className="ticker-wrap border-y border-white/[0.035] bg-transparent">
-      <div className="ticker-track py-3">
-        {[...tickerItems, ...tickerItems].map((item, index) => (
-          <span key={`${item}-${index}`} className="mx-7 font-data text-[10px] font-bold uppercase tracking-[0.2em] text-white/76">
-            {item}
-          </span>
-        ))}
+    <section className="cs-matches-strip" aria-label="Prochains matchs">
+      <div className="cs-hero-container cs-matches-scroll">
+        <div className="cs-matches-label"><span>Prochains matchs</span><i aria-hidden="true" /></div>
+        {upcomingMatches.map((match) => <MatchCard key={`${match.first.name}-${match.second.name}`} match={match} />)}
+        <a className="cs-all-matches" href="#matchs"><span>Voir tous les matchs</span><HeroArrow /></a>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -282,40 +403,617 @@ function Testimonials() {
   );
 }
 
-function ProblemSection() {
+type ProblemIconName = "alert" | "chart" | "clock" | "crosshair" | "chevrons" | "zap" | "shield";
+
+function ProblemIcon({ name, className = "" }: Readonly<{ name: ProblemIconName; className?: string }>) {
+  const paths: Record<ProblemIconName, ReactNode> = {
+    alert: <><circle cx="12" cy="12" r="9" /><path d="M12 7.5v5" /><path d="M12 16.5h.01" /></>,
+    chart: <><path d="M4 19V9" /><path d="M9 19V5" /><path d="M14 19v-7" /><path d="M19 19V3" /></>,
+    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" /></>,
+    crosshair: <><circle cx="12" cy="12" r="5" /><path d="M12 2v4M12 18v4M2 12h4M18 12h4" /></>,
+    chevrons: <><path d="m7 7 5 5-5 5" /><path d="m13 7 5 5-5 5" /></>,
+    zap: <path d="M13 2 5 14h7l-1 8 8-12h-7l1-8Z" />,
+    shield: <><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6l-7-3Z" /><path d="m9 12 2 2 4-4" /></>,
+  };
+
   return (
-    <section id="plateforme" className="section-shell section-bg bg-probleme">
-      <div className="x-container">
-        <div className="grid gap-8 lg:grid-cols-[1fr_300px] lg:items-end">
-          <SectionTitle
-            eyebrow="Ce qui bloque la lecture"
-            title="Tu as les infos. Mais elles arrivent dans le désordre."
-            copy="Sur CS2, le problème arrive au moment précis où tu dois décider : trop de sources, trop de signaux, pas assez de contexte relié."
-            tone="dark"
-          />
-          <div className="rounded-[14px] border border-[#1C3555] bg-[#071426] p-5">
-            <p className="font-data text-[11px] font-bold uppercase tracking-[0.18em] text-[#FF9F43]">Diagnostic actuel</p>
-            {["Trop d'onglets ouverts", "Signaux non relies", "Timing difficile a lire"].map((item) => (
-              <div key={item} className="mt-4 flex items-center gap-3 text-sm font-semibold text-[#DDE7F6]">
-                <span className="size-2 rounded-full bg-[#FF9F43]" />
-                {item}
-              </div>
-            ))}
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name]}
+    </svg>
+  );
+}
+
+function ProblemSection() {
+  const diagnosticItems: Array<{ icon: ProblemIconName; label: string }> = [
+    { icon: "alert", label: "Trop d’onglets ouverts" },
+    { icon: "chart", label: "Signaux non reliés" },
+    { icon: "clock", label: "Timing difficile à lire" },
+  ];
+
+  const benefits: Array<{ icon: ProblemIconName; lines: [string, string] }> = [
+    { icon: "crosshair", lines: ["Données fiables", "et centralisées"] },
+    { icon: "zap", lines: ["Analyse en temps réel", "et contextualisée"] },
+    { icon: "shield", lines: ["Lecture claire,", "action rapide"] },
+  ];
+
+  return (
+    <section id="plateforme" className="problem-v2-section presentation-blue">
+      <div className="problem-v2-container">
+        <div className="problem-v2-intro-grid">
+          <div className="problem-v2-intro-copy">
+            <div className="problem-v2-index">
+              <i aria-hidden="true"><span /></i>
+              <strong>01</strong>
+              <span aria-hidden="true" />
+              <p>Diagnostic de terrain</p>
+            </div>
+
+            <h2>
+              <span>Tu as les infos.</span>
+              <span>Mais elles arrivent</span>
+              <span>Dans le désordre.</span>
+            </h2>
+
+            <div className="problem-v2-lead">
+              <i aria-hidden="true" />
+              <p>
+                Sur CS2, le problème arrive au moment précis où tu dois décider :<br />
+                trop de sources, trop de signaux, pas assez de contexte relié.
+              </p>
+            </div>
           </div>
+
+          <aside className="problem-v2-diagnostic" aria-label="Diagnostic actuel">
+            <header>
+              <div><span aria-hidden="true" />Analyse active</div>
+              <p>STS / <strong>01</strong></p>
+            </header>
+            <div className="problem-v2-diagnostic-body">
+              <h3>Diagnostic actuel</h3>
+              <div className="problem-v2-diagnostic-list">
+                {diagnosticItems.map((item) => (
+                  <div key={item.label} className="problem-v2-diagnostic-row">
+                    <div><ProblemIcon name={item.icon} /><span>{item.label}</span></div>
+                    <i aria-hidden="true" />
+                  </div>
+                ))}
+              </div>
+              <footer><span>État</span><strong>Lecture fragmentée</strong></footer>
+            </div>
+          </aside>
         </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {problems.map(([title, copy]) => (
-            <article key={title} className="soft-card rounded-[14px]">
-              <div className="mb-5 h-1 w-14 rounded-full bg-gradient-to-r from-[#218BFF] to-[#FF9F43]" />
-              <h3 className="font-heading text-xl font-black text-white">{title}</h3>
-              <p className="mt-4 text-sm leading-7 text-[#9FB0CA]">{copy}</p>
-              <span className="mt-5 inline-flex rounded-[6px] bg-[#FF9F43]/12 px-3 py-1 font-data text-[10px] font-bold uppercase text-[#FF9F43]">
-                signal à clarifier
-              </span>
+
+        <div className="problem-v2-grid">
+          {problems.map((problem, index) => (
+            <article
+              key={problem.code}
+              className="problem-v2-item"
+              style={{ animationDelay: `${120 + index * 55}ms`, backgroundImage: `url(${problem.image})` }}
+            >
+              <header>
+                <strong>{problem.code}</strong>
+                <p>{problem.category}</p>
+              </header>
+              <div className="problem-v2-item-body">
+                <h3>{problem.title.map((line) => <span key={line}>{line}</span>)}</h3>
+                <i aria-hidden="true" />
+                <p>{problem.copy}</p>
+              </div>
+              <footer className={index === 3 ? "is-emphasis" : undefined}>
+                <ProblemIcon name="crosshair" />
+                <span>{problem.status}</span>
+              </footer>
             </article>
           ))}
         </div>
+
+        <div className="problem-v2-promise">
+          <div className="problem-v2-promise-main">
+            <p><ProblemIcon name="chevrons" />Notre promesse</p>
+            <h3>On connecte les bonnes données.<br />Au bon moment. Pour les bonnes décisions.</h3>
+          </div>
+          {benefits.map((benefit) => (
+            <div key={benefit.lines[0]} className="problem-v2-benefit">
+              <ProblemIcon name={benefit.icon} />
+              <p><span>{benefit.lines[0]}</span><span>{benefit.lines[1]}</span></p>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <style jsx>{`
+        .problem-v2-section {
+          --ink: #111b25;
+          --ink-soft: #2b343e;
+          --muted: #626b73;
+          --orange: #ff681c;
+          --line: rgba(17, 27, 37, 0.15);
+          --line-light: rgba(17, 27, 37, 0.08);
+          position: relative;
+          overflow: hidden;
+          padding: 112px 0 96px;
+          background-color: #f8f7f4 !important;
+          background-image: url("/assets/xerius/fondsection1.PNG") !important;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          color: var(--ink) !important;
+        }
+
+        .problem-v2-container {
+          width: min(1420px, calc(100% - 96px));
+          margin-inline: auto;
+        }
+
+        .problem-v2-intro-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.65fr) minmax(360px, 0.75fr);
+          align-items: start;
+          gap: 80px;
+        }
+
+        .problem-v2-intro-copy {
+          animation: problem-copy-in 420ms ease-out both;
+        }
+
+        .problem-v2-index {
+          display: flex;
+          height: 24px;
+          align-items: center;
+          gap: 12px;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-index > i {
+          display: grid;
+          width: 18px;
+          height: 18px;
+          place-items: center;
+          background: var(--ink);
+        }
+
+        .problem-v2-index > i span {
+          width: 4px;
+          height: 4px;
+          background: var(--orange);
+        }
+
+        .problem-v2-index > strong {
+          color: var(--orange) !important;
+          font-size: 22px;
+          font-weight: 700;
+          line-height: 1;
+        }
+
+        .problem-v2-index > span {
+          width: 28px;
+          height: 1px;
+          background: var(--orange);
+        }
+
+        .problem-v2-index p {
+          margin: 0;
+          color: var(--muted) !important;
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: 2.4px;
+        }
+
+        .problem-v2-intro-copy h2 {
+          max-width: 780px;
+          margin: 30px 0 0;
+          color: var(--ink) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: clamp(64px, 5.3vw, 84px);
+          font-weight: 700;
+          letter-spacing: -1px;
+          line-height: 0.94;
+          text-shadow: none !important;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-intro-copy h2 span {
+          display: block;
+          color: inherit !important;
+        }
+
+        .problem-v2-intro-copy h2 span:last-child {
+          color: var(--orange) !important;
+        }
+
+        .problem-v2-lead {
+          display: flex;
+          max-width: 650px;
+          gap: 20px;
+          margin-top: 28px;
+        }
+
+        .problem-v2-lead > i {
+          width: 2px;
+          flex: 0 0 2px;
+          background: var(--orange);
+        }
+
+        .problem-v2-lead p {
+          margin: 0;
+          color: #4b555f !important;
+          font-family: var(--font-body), "Inter", sans-serif;
+          font-size: 15px;
+          line-height: 1.7;
+          text-shadow: none !important;
+        }
+
+        .problem-v2-diagnostic {
+          width: 100%;
+          max-width: 380px;
+          justify-self: end;
+          border: 1px solid var(--line);
+          background: #fbfaf7;
+          animation: problem-panel-in 440ms 80ms ease-out both;
+        }
+
+        .problem-v2-diagnostic > header {
+          display: flex;
+          height: 50px;
+          align-items: center;
+          justify-content: space-between;
+          padding-inline: 20px;
+          background: var(--ink);
+          color: #eef0f2;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-diagnostic > header div {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .problem-v2-diagnostic > header div span {
+          width: 7px;
+          height: 7px;
+          border: 1px solid var(--orange);
+          transform: rotate(45deg);
+        }
+
+        .problem-v2-diagnostic > header p {
+          margin: 0;
+          color: #aab0b5 !important;
+        }
+
+        .problem-v2-diagnostic > header strong {
+          color: var(--orange) !important;
+          font-weight: 700;
+        }
+
+        .problem-v2-diagnostic-body {
+          padding: 28px 22px 20px;
+        }
+
+        .problem-v2-diagnostic-body h3 {
+          margin: 0 0 20px;
+          color: var(--ink) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 30px;
+          font-weight: 700;
+          line-height: 1;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-diagnostic-list {
+          border-top: 1px solid var(--line);
+        }
+
+        .problem-v2-diagnostic-row {
+          display: flex;
+          min-height: 48px;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .problem-v2-diagnostic-row > div {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .problem-v2-diagnostic-row :global(svg) {
+          width: 21px;
+          height: 21px;
+          color: var(--orange);
+        }
+
+        .problem-v2-diagnostic-row span {
+          color: var(--ink-soft) !important;
+          font-family: var(--font-body), "Inter", sans-serif;
+          font-size: 14px;
+        }
+
+        .problem-v2-diagnostic-row > i {
+          width: 14px;
+          height: 1px;
+          background: #9da4aa;
+        }
+
+        .problem-v2-diagnostic-body footer {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 18px;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-diagnostic-body footer span {
+          color: var(--muted) !important;
+        }
+
+        .problem-v2-diagnostic-body footer strong {
+          color: var(--orange) !important;
+        }
+
+        .problem-v2-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0;
+          margin-top: 78px;
+          border: 1px solid var(--line);
+        }
+
+        .problem-v2-item {
+          position: relative;
+          min-height: 315px;
+          border: 0 !important;
+          border-radius: 0 !important;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          padding: 0 !important;
+          box-shadow: none !important;
+        }
+
+        .problem-v2-item > header {
+          display: flex;
+          min-height: 50px;
+          align-items: center;
+          gap: 22px;
+          padding-right: 20px;
+        }
+
+        .problem-v2-item > header strong {
+          display: grid;
+          width: 34px;
+          height: 34px;
+          flex: 0 0 34px;
+          place-items: center;
+          margin-left: 16px;
+          background: var(--ink);
+          color: var(--orange) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 17px;
+          font-weight: 700;
+        }
+
+        .problem-v2-item > header p {
+          margin: 0;
+          color: var(--muted) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 1.8px;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-item-body {
+          padding: 18px 28px 66px;
+        }
+
+        .problem-v2-item-body h3 {
+          max-width: 255px;
+          margin: 0;
+          color: var(--ink) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 31px;
+          font-weight: 700;
+          line-height: 0.94;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-item-body h3 span {
+          display: block;
+          color: inherit !important;
+        }
+
+        .problem-v2-item-body > i {
+          display: block;
+          width: 20px;
+          height: 2px;
+          margin-top: 18px;
+          background: var(--orange);
+        }
+
+        .problem-v2-item-body > p {
+          max-width: 245px;
+          margin: 20px 0 0;
+          color: var(--muted) !important;
+          font-family: var(--font-body), "Inter", sans-serif;
+          font-size: 13.5px;
+          line-height: 1.5;
+        }
+
+        .problem-v2-item > footer {
+          position: absolute;
+          right: 28px;
+          bottom: 20px;
+          left: 28px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: var(--orange) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-item > footer :global(svg) {
+          width: 17px;
+          height: 17px;
+          color: var(--orange);
+          stroke: var(--orange);
+        }
+
+        .problem-v2-item > footer span {
+          color: inherit !important;
+        }
+
+        .problem-v2-promise {
+          display: grid;
+          grid-template-columns: 1.55fr repeat(3, 0.85fr);
+          min-height: 145px;
+          margin-top: 24px;
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .problem-v2-promise-main {
+          padding: 28px 42px;
+          border: 0;
+          background: transparent;
+        }
+
+        .problem-v2-promise-main > p {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          margin: 0 0 13px;
+          color: var(--muted) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 1.8px;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-promise-main > p :global(svg) {
+          width: 18px;
+          color: var(--orange);
+        }
+
+        .problem-v2-promise-main h3 {
+          max-width: 520px;
+          margin: 0;
+          color: var(--ink) !important;
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+          font-size: 29px;
+          font-weight: 700;
+          line-height: 0.98;
+          text-transform: uppercase;
+        }
+
+        .problem-v2-benefit {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          padding-inline: 34px;
+          border-left: 1px solid var(--line);
+          background: transparent;
+        }
+
+        .problem-v2-benefit :global(svg) {
+          width: 48px;
+          height: 48px;
+          flex: 0 0 48px;
+          color: var(--ink-soft);
+          stroke-width: 1.25;
+        }
+
+        .problem-v2-benefit p {
+          margin: 0;
+          color: var(--ink-soft) !important;
+          font-family: var(--font-body), "Inter", sans-serif;
+          font-size: 13.5px;
+          line-height: 1.55;
+        }
+
+        .problem-v2-benefit p span {
+          display: block;
+          color: inherit !important;
+        }
+
+        @keyframes problem-copy-in {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes problem-panel-in {
+          from { opacity: 0; transform: translateX(14px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes problem-item-in {
+          from { opacity: 0; transform: translateY(9px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1350px) {
+          .problem-v2-intro-grid { gap: 54px; }
+          .problem-v2-intro-copy h2 { font-size: clamp(60px, 5vw, 76px); }
+          .problem-v2-item-body { padding-inline: 22px; }
+          .problem-v2-item > footer { right: 22px; left: 22px; }
+          .problem-v2-benefit { gap: 18px; padding-inline: 24px; }
+          .problem-v2-benefit :global(svg) { width: 40px; height: 40px; flex-basis: 40px; }
+        }
+
+        @media (max-width: 1023px) {
+          .problem-v2-section { padding-top: 88px; }
+          .problem-v2-intro-grid { grid-template-columns: 1fr; }
+          .problem-v2-diagnostic { max-width: 440px; justify-self: start; }
+          .problem-v2-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 64px; }
+          .problem-v2-promise { grid-template-columns: repeat(2, 1fr); }
+          .problem-v2-promise-main { grid-column: 1 / -1; border-bottom: 1px solid var(--line); }
+          .problem-v2-benefit { min-height: 130px; }
+          .problem-v2-benefit:nth-child(4) { border-top: 1px solid var(--line); }
+        }
+
+        @media (max-width: 640px) {
+          .problem-v2-section { padding: 72px 0 80px; }
+          .problem-v2-container { width: calc(100% - 32px); }
+          .problem-v2-index p { font-size: 11px; letter-spacing: 1.8px; }
+          .problem-v2-intro-copy h2 { font-size: 48px; line-height: 0.94; }
+          .problem-v2-lead p { font-size: 15px; }
+          .problem-v2-lead p br { display: none; }
+          .problem-v2-diagnostic { max-width: none; }
+          .problem-v2-grid { grid-template-columns: 1fr; margin-top: 52px; }
+          .problem-v2-item { min-height: 300px; }
+          .problem-v2-promise { grid-template-columns: 1fr; }
+          .problem-v2-promise-main { grid-column: auto; padding: 26px 24px; }
+          .problem-v2-promise-main h3 { font-size: 27px; }
+          .problem-v2-benefit {
+            min-height: 112px;
+            padding-inline: 24px;
+            border-top: 1px solid var(--line);
+            border-left: 0;
+          }
+          .problem-v2-benefit :global(svg) { width: 42px; height: 42px; flex-basis: 42px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .problem-v2-intro-copy,
+          .problem-v2-diagnostic,
+          .problem-v2-item { animation: none; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -418,83 +1116,544 @@ function MockupPanel({ variant }: Readonly<{ variant: "analysis" | "prediction" 
 
 function MatchFlowSection() {
   const demoSteps = [
-    ["01", "Avant le BO", "Favori, map pool, confiance et risque sont poses avant le live."],
-    ["02", "Pendant le match", "Le stream, le score et les signaux restent dans le meme champ de vision."],
-    ["03", "Apres la serie", "Heatmaps, rounds cles et decisions restent consultables a froid."],
+    {
+      number: "01",
+      title: "Avant le BO",
+      body: "Favori, map pool, confiance et risque sont posés avant le live.",
+      icon: "crosshair",
+    },
+    {
+      number: "02",
+      title: "Pendant le match",
+      body: "Le stream, le score et les signaux restent dans le même champ de vision.",
+      icon: "audio",
+    },
+    {
+      number: "03",
+      title: "Après la série",
+      body: "Heatmaps, rounds clés et décisions restent consultables à froid.",
+      icon: "snowflake",
+    },
   ];
 
   return (
-    <section id="pronostics" className="presentation-blue section-shell section-bg bg-demo">
-      <div className="x-container">
-        <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
-          <div className="panel-glow overflow-hidden rounded-[30px] border border-[#1C3555] bg-[#071426] p-4">
-            <div className="aspect-video rounded-[22px] border border-[#1C3555] bg-[radial-gradient(circle_at_22%_22%,rgba(33,139,255,0.28),transparent_20rem),linear-gradient(135deg,#08111F,#0B2440_58%,#071426)] p-5 tactical-grid">
-              <div className="flex items-center justify-between border-b border-[#1C3555] pb-4">
-                <p className="font-data text-[11px] font-bold uppercase tracking-[0.18em] text-[#68B6FF]">Demo produit Xerius</p>
-                <span className="rounded-full bg-[#102744] px-3 py-1 font-data text-[10px] font-bold uppercase text-[#DDE7F6]">Round 18 · 03:21</span>
-              </div>
-              <div className="grid h-[calc(100%-56px)] gap-4 pt-5 md:grid-cols-[1fr_220px]">
-                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#050B16]/72">
-                  <div className="absolute left-5 top-5 rounded-full border border-[#28D17C]/40 bg-[#28D17C]/12 px-3 py-1 font-data text-[10px] font-bold uppercase text-[#8DFFBE]">
-                    Live analysis
-                  </div>
-                  <div className="absolute inset-x-8 bottom-8">
-                    <div className="mb-3 flex items-center justify-between font-data text-[10px] uppercase tracking-[0.16em] text-[#9FB0CA]">
-                      <span>0:00</span>
-                      <span>Pattern detected</span>
-                      <span>1:44</span>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-[#102744]">
-                      <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-[#218BFF] via-[#68B6FF] to-[#FF9F43]" />
-                    </div>
-                  </div>
-                  <div className="grid h-full place-items-center">
-                    <div className="relative grid size-20 place-items-center rounded-full border border-white/20 bg-white/10 shadow-[0_0_42px_rgba(33,139,255,0.32)]">
-                      <span className="ml-1 block h-0 w-0 border-y-[12px] border-l-[18px] border-y-transparent border-l-white" />
-                    </div>
-                  </div>
-                  <span className="absolute left-[34%] top-[38%] size-3 rounded-full bg-[#FF9F43] shadow-[0_0_18px_rgba(255,159,67,0.8)]" />
-                  <span className="absolute right-[28%] top-[28%] size-2 rounded-full bg-[#68B6FF] shadow-[0_0_18px_rgba(104,182,255,0.8)]" />
-                </div>
-                <div className="hidden space-y-3 md:block">
-                  {[
-                    ["Entry timing", "B short", "hot"],
-                    ["Retake weak", "Site A", "risk"],
-                    ["Economy", "CT low buy", "flag"],
-                  ].map(([label, value, state]) => (
-                    <div key={label} className="rounded-xl border border-white/10 bg-[#050B16]/70 p-3">
-                      <p className="font-data text-[10px] uppercase tracking-[0.16em] text-[#6F829D]">{label}</p>
-                      <p className="mt-1 font-heading text-base font-black text-white">{value}</p>
-                      <p className="mt-2 font-data text-[10px] uppercase text-[#FF9F43]">{state}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+    <section id="pronostics" className="demo-section presentation-blue section-bg bg-demo">
+      <div className="demo-section__container">
+        <div className="demo-section__eyebrow">
+          <span className="demo-section__eyebrow-number">02</span>
+          <span className="demo-section__eyebrow-line" aria-hidden="true" />
+          <span className="demo-section__eyebrow-label">Démo produit Xerius</span>
+        </div>
+
+        <div className="demo-section__grid">
+          <div className="demo-section__media">
+            <div className="demo-video">
+              <video
+                className="demo-video__element"
+                src="/videos/xerius-demo.mp4"
+                controls
+                preload="metadata"
+                playsInline
+                aria-label="Démonstration de la plateforme Xerius"
+              />
             </div>
           </div>
 
-          <div>
-            <SectionTitle
-              eyebrow="Demo produit"
-              title="Regarde Xerius lire un match de bout en bout."
-              copy="La demo montre comment la plateforme relie le prono, le live, le cast, les heatmaps et le suivi de decision sans transformer l'ecran en tableur."
-            />
-            <div className="mt-8 space-y-3">
-              {demoSteps.map(([number, title, body]) => (
-                <div key={title} className="rounded-[16px] border border-[#1C3555] bg-[#071426] p-5">
-                  <div className="flex gap-4">
-                    <p className="font-data text-sm font-bold text-[#FF9F43]">{number}</p>
-                    <div>
-                      <h3 className="font-heading text-xl font-black text-white">{title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-[#9FB0CA]">{body}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="demo-section__content">
+            <p className="demo-section__content-label">Démo en action</p>
+
+            <h2 className="demo-section__title">
+              <span>{"Regarde Xerius "}</span>
+              <span>{"lire un match "}</span>
+              <span className="demo-section__title-accent">de bout en bout.</span>
+            </h2>
+
+            <p className="demo-section__description">
+              La démo montre comment la plateforme relie le prono, le live, le cast, les heatmaps et le suivi de décision sans transformer l’écran en tableur.
+            </p>
           </div>
         </div>
+
+        <div className="demo-steps">
+          {demoSteps.map((step) => (
+            <article key={step.number} className="demo-step">
+              <p className="demo-step__number">{step.number}</p>
+
+              <div className="demo-step__icon" aria-hidden="true">
+                {step.icon === "crosshair" ? (
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <circle cx="18" cy="18" r="9" />
+                    <path d="M18 3v7M18 26v7M3 18h7M26 18h7" />
+                    <circle cx="18" cy="18" r="2.2" className="demo-step__icon-accent" />
+                  </svg>
+                ) : null}
+                {step.icon === "audio" ? (
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <path d="M6 21v-6M12 26V10M18 30V6M24 25V11M30 21v-6" />
+                    <path d="M18 6v4" className="demo-step__icon-accent" />
+                  </svg>
+                ) : null}
+                {step.icon === "snowflake" ? (
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <path d="M18 3v30M5 10.5l26 15M5 25.5l26-15M13.5 5.5 18 10l4.5-4.5M13.5 30.5 18 26l4.5 4.5M5.5 15.5l6.1-1.6-1.6-6M30.5 20.5l-6.1 1.6 1.6 6M5.5 20.5l6.1 1.6-1.6 6M30.5 15.5l-6.1-1.6 1.6-6" />
+                    <circle cx="18" cy="18" r="2" className="demo-step__icon-accent" />
+                  </svg>
+                ) : null}
+              </div>
+
+              <div className="demo-step__copy">
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+
+              <span className="demo-step__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M14 7l5 5-5 5" />
+                </svg>
+              </span>
+            </article>
+          ))}
+        </div>
       </div>
+
+      <style jsx>{`
+        .demo-section {
+          position: relative;
+          padding: 68px 0 92px;
+          overflow: hidden;
+          background-color: #071426 !important;
+          background-image: url("/assets/xerius/fondsection2.png") !important;
+          background-position: center !important;
+          background-size: cover !important;
+          background-repeat: no-repeat !important;
+        }
+
+        .demo-section__container {
+          position: relative;
+          z-index: 1;
+          width: min(1410px, calc(100% - 96px));
+          margin-inline: auto;
+        }
+
+        .demo-section__eyebrow {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          min-height: 28px;
+          margin-bottom: 70px;
+        }
+
+        .demo-section__eyebrow-number,
+        .demo-section__eyebrow-label,
+        .demo-section__content-label,
+        .demo-section__title,
+        .demo-step__number,
+        .demo-step__copy h3 {
+          font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+        }
+
+        .demo-section__eyebrow-number {
+          font-size: 22px;
+          line-height: 1;
+          font-weight: 700;
+          color: #ff681c;
+        }
+
+        .demo-section__eyebrow-line {
+          width: 48px;
+          height: 1px;
+          background: #ff681c;
+        }
+
+        .demo-section__eyebrow-label {
+          font-size: 13px;
+          line-height: 1;
+          font-weight: 600;
+          letter-spacing: 2.4px;
+          text-transform: uppercase;
+          color: #aab3bd;
+        }
+
+        .demo-section__grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.12fr) minmax(460px, 0.88fr);
+          gap: clamp(56px, 5vw, 84px);
+          align-items: start;
+        }
+
+        .demo-section__media {
+          min-width: 0;
+          animation: demo-media-in 520ms ease-out both;
+        }
+
+        .demo-video {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+          border: 1px solid rgba(80, 112, 148, 0.48);
+          border-radius: 16px;
+          background: #02060b;
+        }
+
+        .demo-video__element {
+          display: block;
+          width: 100%;
+          height: 100%;
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+          background: #02060b;
+        }
+
+        .demo-section__content {
+          max-width: 590px;
+          padding-top: 28px;
+          animation: demo-content-in 560ms 80ms ease-out both;
+        }
+
+        .demo-section__content-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 28px;
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: 2.4px;
+          text-transform: uppercase;
+          color: #ff681c;
+          text-shadow: none;
+        }
+
+        .demo-section__content-label::before,
+        .demo-section__content-label::after {
+          color: rgba(255, 104, 28, 0.72);
+        }
+
+        .demo-section__content-label::before {
+          content: "[";
+        }
+
+        .demo-section__content-label::after {
+          content: "]";
+        }
+
+        .demo-section__title {
+          display: flex;
+          flex-direction: column;
+          max-width: 580px;
+          margin: 0;
+          font-size: clamp(64px, 5.3vw, 84px);
+          line-height: 0.94;
+          font-weight: 700;
+          letter-spacing: -1px;
+          text-transform: uppercase;
+          color: #f2f3f4;
+          text-shadow: none;
+        }
+
+        .demo-section__title-accent {
+          color: #ff681c;
+        }
+
+        .demo-section__description {
+          max-width: 555px;
+          margin: 28px 0 0;
+          font-family: var(--font-body), "Inter", sans-serif;
+          font-size: 15px;
+          line-height: 1.7;
+          font-weight: 400;
+          color: #aeb8c4;
+          text-shadow: none;
+        }
+
+        .demo-steps {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          align-items: stretch;
+          gap: 16px;
+          margin-top: 52px;
+        }
+
+        .demo-step {
+          min-height: 150px;
+          height: 100%;
+          display: grid;
+          grid-template-columns: 36px 56px minmax(0, 1fr) 24px;
+          align-items: center;
+          gap: 14px;
+          padding: 20px;
+          border: 1px solid rgba(72, 105, 140, 0.48);
+          border-radius: 13px;
+          background: transparent;
+          animation: demo-step-in 440ms ease-out both;
+          transition:
+            border-color 180ms ease,
+            transform 180ms ease;
+        }
+
+        .demo-step:nth-child(1) {
+          animation-delay: 180ms;
+        }
+
+        .demo-step:nth-child(2) {
+          animation-delay: 280ms;
+        }
+
+        .demo-step:nth-child(3) {
+          animation-delay: 380ms;
+        }
+
+        .demo-step:hover {
+          transform: translateX(3px);
+          border-color: rgba(255, 104, 28, 0.46);
+        }
+
+        .demo-step__number {
+          margin: 0;
+          font-size: 17px;
+          line-height: 1;
+          font-weight: 700;
+          color: #ff681c;
+          text-shadow: none;
+        }
+
+        .demo-step__icon {
+          width: 56px;
+          height: 56px;
+          display: grid;
+          place-items: center;
+          border: 1px solid rgba(65, 98, 132, 0.42);
+          border-radius: 50%;
+          color: #f0f2f4;
+        }
+
+        .demo-step__icon svg {
+          width: 34px;
+          height: 34px;
+          stroke: currentColor;
+          stroke-width: 1.4;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .demo-step__icon :global(.demo-step__icon-accent) {
+          stroke: #ff681c;
+        }
+
+        .demo-step__copy h3 {
+          margin: 0;
+          font-size: 31px;
+          line-height: 0.94;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #f0f2f4;
+        }
+
+        .demo-step__copy p {
+          max-width: none;
+          margin: 8px 0 0;
+          font-family: var(--font-body), "Inter", sans-serif;
+          font-size: 13.5px;
+          line-height: 1.5;
+          color: #a6b0bc;
+          text-shadow: none;
+        }
+
+        .demo-step__arrow {
+          display: grid;
+          place-items: center;
+          color: #8190a0;
+          transition:
+            color 180ms ease,
+            transform 180ms ease;
+        }
+
+        .demo-step__arrow svg {
+          width: 24px;
+          height: 24px;
+          stroke: currentColor;
+          stroke-width: 1.3;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .demo-step:hover .demo-step__arrow {
+          color: #ff681c;
+          transform: translateX(4px);
+        }
+
+        @keyframes demo-media-in {
+          from {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes demo-content-in {
+          from {
+            opacity: 0;
+            transform: translateX(28px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes demo-step-in {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 1350px) {
+          .demo-section__title {
+            font-size: clamp(60px, 5vw, 76px);
+          }
+        }
+
+        @media (max-width: 1100px) {
+          .demo-section__grid {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+            gap: 42px;
+          }
+
+          .demo-step {
+            grid-template-columns: 30px 48px minmax(0, 1fr);
+            gap: 12px;
+            padding: 18px;
+          }
+
+          .demo-step__icon {
+            width: 48px;
+            height: 48px;
+          }
+
+          .demo-step__arrow {
+            display: none;
+          }
+
+          .demo-step__copy h3 {
+            font-size: 27px;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .demo-section__grid {
+            grid-template-columns: 1fr;
+            gap: 52px;
+          }
+
+          .demo-section__content {
+            max-width: 680px;
+            padding-top: 0;
+          }
+
+          .demo-steps {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 44px;
+          }
+
+          .demo-step {
+            min-height: 122px;
+            grid-template-columns: 44px 58px minmax(0, 1fr) 28px;
+          }
+
+          .demo-step__icon {
+            width: 58px;
+            height: 58px;
+          }
+
+          .demo-step__arrow {
+            display: grid;
+          }
+
+          .demo-step__copy h3 {
+            font-size: 31px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .demo-section {
+            padding: 56px 0 72px;
+          }
+
+          .demo-section__container {
+            width: calc(100% - 32px);
+          }
+
+          .demo-section__eyebrow {
+            gap: 12px;
+            margin-bottom: 44px;
+          }
+
+          .demo-section__eyebrow-line {
+            width: 32px;
+          }
+
+          .demo-section__eyebrow-label {
+            font-size: 11px;
+            letter-spacing: 1.8px;
+          }
+
+          .demo-section__title {
+            font-size: 48px;
+            line-height: 0.94;
+          }
+
+          .demo-section__description {
+            font-size: 15px;
+          }
+
+          .demo-step {
+            grid-template-columns: 38px 48px 1fr;
+            gap: 12px;
+            padding: 16px;
+          }
+
+          .demo-step__arrow {
+            display: none;
+          }
+
+          .demo-step__icon {
+            width: 48px;
+            height: 48px;
+          }
+
+          .demo-step__icon svg {
+            width: 28px;
+            height: 28px;
+          }
+
+          .demo-step__copy h3 {
+            font-size: 31px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .demo-section__media,
+          .demo-section__content,
+          .demo-step {
+            opacity: 1;
+            transform: none;
+            animation: none;
+          }
+
+          .demo-step,
+          .demo-step__arrow {
+            transition: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }
