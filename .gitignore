@@ -2,3 +2,8 @@
 **/.DS_Store
 **/.next/
 **/node_modules/
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.template
+**/*.tsbuildinfo

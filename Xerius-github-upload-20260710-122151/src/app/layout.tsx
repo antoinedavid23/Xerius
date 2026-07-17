@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Barlow_Condensed, Geist, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import "./xerius-mirror.css";
+import "./barlow-mirror.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-heading" });
 const barlowCondensed = Barlow_Condensed({
