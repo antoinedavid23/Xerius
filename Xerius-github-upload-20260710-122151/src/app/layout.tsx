@@ -4,6 +4,7 @@ import { Barlow_Condensed, Geist, IBM_Plex_Mono, Inter } from "next/font/google"
 import "./globals.css";
 import "./xerius-mirror.css";
 import "./barlow-mirror.css";
+import "./xerius-polish.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-heading" });
 const barlowCondensed = Barlow_Condensed({
@@ -20,9 +21,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Xerius | CS2 Analytics",
+  title: "Xerius — Analyse et suivi des matchs CS2",
   description:
-    "Plateforme CS2 pour centraliser pronostics, analyses, matchs live, portefeuille et signaux utiles.",
+    "Suivez les matchs CS2 sans multiplier les onglets : live, score, map pool, line-up, statistiques et analyses réunis dans un même cockpit.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

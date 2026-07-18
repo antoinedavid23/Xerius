@@ -1,0 +1,1008 @@
+/* Final interaction layer for the local Xerius mirror. */
+
+/* Copy breathing room ---------------------------------------------------- */
+.cs-hero-copy {
+  max-width: 520px;
+}
+
+@media (max-width: 640px) {
+  .cs-hero-copy {
+    max-width: 100%;
+  }
+}
+
+/* Live insight ticker ----------------------------------------------------- */
+.cs-matches-strip.xerius-insight-ticker {
+  position: relative;
+  height: 86px;
+  overflow: hidden;
+  border-color: rgba(104, 182, 255, 0.18);
+  background:
+    linear-gradient(90deg, rgba(255, 104, 28, 0.055), transparent 24%),
+    #08111b;
+}
+
+.cs-matches-strip.xerius-insight-ticker::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(104, 182, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(104, 182, 255, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  content: "";
+}
+
+.x-ticker-frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 205px minmax(0, 1fr);
+  height: 100%;
+}
+
+.x-ticker-label {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-right: 1px solid rgba(104, 182, 255, 0.2);
+  color: #f1f4f7;
+}
+
+.x-ticker-label-dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: #ff681c;
+  box-shadow: 0 0 0 0 rgba(255, 104, 28, 0.55);
+  animation: x-ticker-pulse 1.8s ease-out infinite;
+}
+
+.x-ticker-label-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.x-ticker-label-copy b {
+  font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.35px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.x-ticker-label-copy small {
+  color: #68809c;
+  font-family: var(--font-data), monospace;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.x-ticker-window {
+  height: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+
+.x-ticker-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+  animation: x-ticker-scroll 36s linear infinite;
+}
+
+.x-ticker-window:hover .x-ticker-track,
+.x-ticker-window:focus-within .x-ticker-track {
+  animation-play-state: paused;
+}
+
+.x-ticker-group {
+  display: flex;
+  height: 100%;
+}
+
+.x-ticker-card {
+  position: relative;
+  display: grid;
+  width: 320px;
+  height: 100%;
+  grid-template-columns: 78px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 0 20px;
+  color: #f2f5f7;
+  transition:
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease;
+}
+
+.x-ticker-card::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 20%, rgba(255, 104, 28, 0.14) 48%, transparent 76%);
+  content: "";
+  transform: translateX(-115%);
+  transition: transform 620ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.x-ticker-card:hover,
+.x-ticker-card:focus-visible {
+  background: rgba(104, 182, 255, 0.065);
+  box-shadow: inset 0 -2px 0 #ff681c;
+  outline: 0;
+}
+
+.x-ticker-card:hover::before,
+.x-ticker-card:focus-visible::before {
+  transform: translateX(115%);
+}
+
+.x-ticker-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff8b4c;
+  font-family: var(--font-data), monospace;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  text-transform: uppercase;
+}
+
+.x-ticker-status i {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.x-ticker-card[data-tone="blue"] .x-ticker-status {
+  color: #68b6ff;
+}
+
+.x-ticker-card[data-tone="green"] .x-ticker-status {
+  color: #62e6a0;
+}
+
+.x-ticker-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.x-ticker-copy strong {
+  overflow: hidden;
+  color: #edf2f7;
+  font-family: var(--font-hero-heading), "Barlow Condensed", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.x-ticker-copy small {
+  overflow: hidden;
+  color: #8092a6;
+  font-family: var(--font-body), "Inter", sans-serif;
+  font-size: 10px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.x-ticker-arrow {
+  width: 18px;
+  color: #6f8298;
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.x-ticker-card:hover .x-ticker-arrow,
+.x-ticker-card:focus-visible .x-ticker-arrow {
+  color: #ff681c;
+  transform: translate(3px, -3px);
+}
+
+@keyframes x-ticker-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes x-ticker-pulse {
+  70% {
+    box-shadow: 0 0 0 7px rgba(255, 104, 28, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 104, 28, 0);
+  }
+}
+
+/* Symmetrical problem cards --------------------------------------------- */
+#plateforme .problem-v2-grid {
+  align-items: stretch;
+}
+
+#plateforme .problem-v2-item {
+  display: grid !important;
+  min-height: 342px;
+  grid-template-rows: 50px minmax(0, 1fr) 58px;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 260ms ease,
+    filter 260ms ease;
+}
+
+#plateforme .problem-v2-item:hover {
+  z-index: 2;
+  filter: saturate(1.08);
+  transform: translateY(-7px);
+  box-shadow: 0 22px 50px rgba(17, 27, 37, 0.18) !important;
+}
+
+#plateforme .problem-v2-item-body {
+  display: grid;
+  grid-template-rows: 90px 2px minmax(0, 1fr);
+  align-content: start;
+  padding: 18px 28px 0;
+}
+
+#plateforme .problem-v2-item-body h3 {
+  display: flex;
+  min-height: 90px;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#plateforme .problem-v2-item-body h3 > span {
+  display: block;
+  color: inherit !important;
+}
+
+#plateforme .problem-v2-item-body > i {
+  margin-top: 0;
+}
+
+#plateforme .problem-v2-item-body > p {
+  margin-top: 18px;
+}
+
+#plateforme .problem-v2-item > footer {
+  position: static;
+  display: flex;
+  min-height: 58px;
+  align-self: end;
+  padding: 0 28px 17px;
+}
+
+/* Remove every decorative quotation glyph ------------------------------- */
+.x-social-proof-quote {
+  display: none !important;
+}
+
+.x-review-quote {
+  padding-left: 0 !important;
+}
+
+.x-review-quote::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Transparent card surfaces from the supplied screenshots ---------------- */
+#plateforme .problem-v2-item.x-map-card,
+#plateforme .problem-v2-diagnostic,
+main #resultats .x-result-map-card,
+#pricing .x-pricing-card,
+body main > section.x-social-proof.xerius-surface-white:not(.presentation-blue) .x-review-map-card,
+body main > section.x-social-proof .x-social-rating {
+  background: transparent !important;
+}
+
+#plateforme .problem-v2-diagnostic {
+  background: rgba(251, 250, 247, 0.8) !important;
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+}
+
+main #resultats .x-result-map-tag {
+  display: none !important;
+}
+
+main #resultats .x-result-map-card {
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+body main > section.x-social-proof.xerius-surface-white:not(.presentation-blue) .x-review-map-card {
+  border: 1px solid rgba(7, 20, 38, 0.12) !important;
+  border-top-color: rgba(7, 20, 38, 0.16) !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 13px 32px rgba(7, 20, 38, 0.075) !important;
+}
+
+body main > section.x-social-proof.xerius-surface-white:not(.presentation-blue) .x-review-map-card::before {
+  content: none !important;
+  background: none !important;
+}
+
+body main > section.x-social-proof .x-review-map-card .x-review-verified {
+  display: none !important;
+}
+
+body main > section.x-social-proof .x-review-map-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(7, 20, 38, 0.11) !important;
+}
+
+body main > section.x-social-proof .x-review-map-card .x-review-quote {
+  min-height: 96px;
+}
+
+/* Pricing: quiet premium hierarchy -------------------------------------- */
+#pricing .x-pricing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 18px;
+}
+
+#pricing .x-pricing-card[data-plan] {
+  --plan-accent: #8ea4be;
+  --plan-accent-rgb: 142, 164, 190;
+  isolation: isolate;
+  min-height: 640px;
+  height: 100%;
+  padding: clamp(24px, 2.5vw, 32px) !important;
+  border: 1px solid rgba(var(--plan-accent-rgb), 0.3) !important;
+  border-top: 2px solid rgba(var(--plan-accent-rgb), 0.72) !important;
+  border-radius: 5px !important;
+  background-color: rgba(4, 12, 24, 0.72) !important;
+  background-image:
+    linear-gradient(180deg, rgba(var(--plan-accent-rgb), 0.075), transparent 31%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.025), transparent 46%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(115%) !important;
+  backdrop-filter: blur(12px) saturate(115%) !important;
+  clip-path: none !important;
+  filter: none;
+  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.18) !important;
+  transition:
+    transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 240ms ease,
+    background-color 240ms ease,
+    box-shadow 240ms ease !important;
+}
+
+#pricing .x-pricing-card[data-plan="free"] {
+  --plan-accent: #8ea4be;
+  --plan-accent-rgb: 142, 164, 190;
+}
+
+#pricing .x-pricing-card[data-plan="pro"] {
+  --plan-accent: #ff7a18;
+  --plan-accent-rgb: 255, 122, 24;
+  border-color: rgba(255, 122, 24, 0.52) !important;
+  border-top-color: #ff7a18 !important;
+  background-color: rgba(6, 17, 32, 0.88) !important;
+  background-image:
+    linear-gradient(180deg, rgba(255, 122, 24, 0.12), transparent 34%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.035), transparent 48%) !important;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.25) !important;
+}
+
+#pricing .x-pricing-card[data-plan="expert"] {
+  --plan-accent: #68b6ff;
+  --plan-accent-rgb: 104, 182, 255;
+  background-color: rgba(4, 14, 27, 0.77) !important;
+}
+
+#pricing .x-pricing-card[data-plan]::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(var(--plan-accent-rgb), 0.09), transparent 1px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  content: "";
+}
+
+#pricing .x-pricing-card[data-plan]::after {
+  position: absolute;
+  z-index: -1;
+  right: 16px;
+  bottom: 16px;
+  width: 22px;
+  height: 22px;
+  border-right: 1px solid rgba(var(--plan-accent-rgb), 0.5);
+  border-bottom: 1px solid rgba(var(--plan-accent-rgb), 0.5);
+  content: "" !important;
+}
+
+#pricing .x-pricing-card[data-plan]:hover,
+#pricing .x-pricing-card[data-plan]:focus-within {
+  border-color: rgba(var(--plan-accent-rgb), 0.62) !important;
+  background-color: rgba(6, 17, 31, 0.9) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.26) !important;
+}
+
+#pricing .x-pricing-topline {
+  display: flex;
+  min-height: 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+#pricing .x-pricing-plan-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #9fb0ca;
+}
+
+#pricing .x-pricing-plan-marker > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(var(--plan-accent-rgb), 0.42);
+  background: rgba(var(--plan-accent-rgb), 0.08);
+  color: var(--plan-accent);
+  font-family: var(--font-data), monospace;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+#pricing .x-pricing-plan-marker > b,
+#pricing .x-pricing-badge,
+#pricing .x-pricing-features-label {
+  font-family: var(--font-data), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+#pricing .x-pricing-plan-marker > b {
+  color: #91a5bf;
+}
+
+#pricing .x-pricing-badge {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 122, 24, 0.5);
+  border-radius: 999px;
+  background: rgba(255, 122, 24, 0.1);
+  color: #ffb071;
+  white-space: nowrap;
+}
+
+#pricing .x-pricing-card[data-plan] > h3 {
+  font-size: clamp(2.35rem, 3.4vw, 3rem) !important;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+#pricing .x-pricing-description {
+  min-height: 74px;
+  margin-top: 14px !important;
+  color: #c4d2e6 !important;
+  font-size: 15px;
+  line-height: 1.62;
+}
+
+#pricing .x-pricing-fit {
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 15px;
+  color: #8fa5c0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#pricing .x-pricing-fit::before {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: var(--plan-accent);
+  content: "";
+}
+
+#pricing .x-pricing-price {
+  margin-top: 24px !important;
+}
+
+#pricing .x-pricing-price > span:first-child {
+  color: #f5a45d !important;
+  font-size: clamp(3.1rem, 4.5vw, 4.25rem) !important;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+#pricing .x-pricing-price > span:last-child {
+  padding-bottom: 5px !important;
+  color: #9fb0ca !important;
+  font-size: 14px;
+}
+
+#pricing .x-pricing-billing {
+  display: flex;
+  min-height: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 9px;
+}
+
+#pricing .x-pricing-billing-copy {
+  margin: 0 !important;
+  color: #9fb0ca !important;
+  font-size: 12px !important;
+}
+
+#pricing .x-pricing-saving {
+  display: inline-flex;
+  min-height: 23px;
+  align-items: center;
+  padding: 0 8px;
+  border: 1px solid rgba(126, 226, 173, 0.24);
+  border-radius: 999px;
+  background: rgba(126, 226, 173, 0.07);
+  color: #8cddb2;
+  font-family: var(--font-data), monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+#pricing .x-pricing-divider {
+  margin: 24px 0 20px !important;
+  background: rgba(142, 164, 190, 0.2) !important;
+}
+
+#pricing .x-pricing-features-label {
+  margin-bottom: 14px;
+  color: #7f93ad;
+}
+
+#pricing .x-pricing-features {
+  display: grid;
+  gap: 13px;
+}
+
+#pricing .x-pricing-features > li {
+  align-items: center;
+  gap: 11px !important;
+  color: #dce6f3 !important;
+  font-size: 13px !important;
+  line-height: 1.35;
+}
+
+#pricing .x-pricing-features > li > span:first-child {
+  width: 19px !important;
+  height: 19px !important;
+  margin-top: 0 !important;
+  border: 1px solid rgba(var(--plan-accent-rgb), 0.45);
+  background: rgba(var(--plan-accent-rgb), 0.09) !important;
+  color: var(--plan-accent) !important;
+}
+
+#pricing .x-pricing-feature-copy {
+  display: inline !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  text-shadow: none !important;
+}
+
+#pricing .x-pricing-footer {
+  padding-top: 30px !important;
+}
+
+#pricing .x-pricing-footer > a.xerius-action {
+  width: 100%;
+  min-height: 52px;
+  justify-content: space-between;
+  padding-inline: 18px;
+  box-shadow: none !important;
+}
+
+#pricing .x-pricing-cta-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+
+#pricing [data-plan="free"] a.xerius-action--pricing-free {
+  --action-accent: #8ea4be;
+  border-color: rgba(142, 164, 190, 0.58) !important;
+  background-color: rgba(142, 164, 190, 0.04) !important;
+  background-image: none !important;
+  color: #e4edf8 !important;
+}
+
+#pricing [data-plan="pro"] a.xerius-action--pricing-pro {
+  border-color: #ff8f3d !important;
+  background-color: #ff7a18 !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 48%) !important;
+  color: #071426 !important;
+}
+
+#pricing [data-plan="expert"] a.xerius-action--pricing-expert {
+  --action-accent: #68b6ff;
+  border-color: rgba(104, 182, 255, 0.65) !important;
+  background-color: rgba(104, 182, 255, 0.06) !important;
+  background-image: none !important;
+  color: #e7f3ff !important;
+}
+
+#pricing [data-plan="free"] a.xerius-action--pricing-free:hover,
+#pricing [data-plan="free"] a.xerius-action--pricing-free:focus-visible {
+  border-color: #a9bbd1 !important;
+  background-color: rgba(142, 164, 190, 0.1) !important;
+  box-shadow: inset 3px 0 0 #8ea4be !important;
+}
+
+#pricing [data-plan="expert"] a.xerius-action--pricing-expert:hover,
+#pricing [data-plan="expert"] a.xerius-action--pricing-expert:focus-visible {
+  border-color: #68b6ff !important;
+  background-color: rgba(104, 182, 255, 0.12) !important;
+  box-shadow: inset 3px 0 0 #68b6ff !important;
+}
+
+#pricing .x-pricing-grid + p {
+  max-width: 720px;
+  margin-top: 28px !important;
+  color: #7f93ad !important;
+  line-height: 1.7;
+}
+
+@media (min-width: 720px) {
+  #pricing .x-pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #pricing .x-pricing-card[data-plan="expert"] {
+    grid-column: 1 / -1;
+    width: calc(50% - 9px);
+    justify-self: center;
+  }
+}
+
+@media (min-width: 1120px) {
+  #pricing .x-pricing-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #pricing .x-pricing-card[data-plan="expert"] {
+    grid-column: auto;
+    width: auto;
+    justify-self: stretch;
+  }
+
+  #pricing .x-pricing-card[data-plan="pro"] {
+    transform: translateY(-9px);
+  }
+
+  #pricing .x-pricing-card[data-plan="pro"]:hover,
+  #pricing .x-pricing-card[data-plan="pro"]:focus-within {
+    transform: translateY(-13px);
+  }
+}
+
+@media (max-width: 719px) {
+  #pricing .x-pricing-card[data-plan] {
+    min-height: 0;
+  }
+
+  #pricing .x-pricing-description {
+    min-height: 0;
+  }
+
+  #pricing .x-pricing-fit {
+    min-height: 0;
+  }
+}
+
+body main > section.x-social-proof .x-social-rating :where(p, span, small) {
+  color: #071426 !important;
+  text-shadow: none !important;
+}
+
+body main > section.x-social-proof .x-social-rating .x-rating-verified {
+  color: #17633f !important;
+}
+
+body main > section.x-social-proof .x-social-rating .x-rating-bars i {
+  background: rgba(7, 20, 38, 0.13) !important;
+}
+
+body main > section.x-social-proof .x-social-rating .x-rating-bars b {
+  background: #ff681c !important;
+}
+
+/* Futuristic action buttons --------------------------------------------- */
+a.xerius-action {
+  --action-accent: #ff681c;
+  --action-cut: 12px;
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--action-cut)) 0,
+    100% var(--action-cut),
+    100% 100%,
+    var(--action-cut) 100%,
+    0 calc(100% - var(--action-cut))
+  );
+  transform: translateZ(0);
+  will-change: transform;
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 260ms ease,
+    background-color 260ms ease,
+    color 260ms ease,
+    box-shadow 260ms ease,
+    filter 260ms ease !important;
+}
+
+a.xerius-action--primary {
+  border: 1px solid #ff8b4c !important;
+  background-color: #ff681c !important;
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 44%),
+    linear-gradient(90deg, transparent 49%, rgba(7, 20, 38, 0.08) 50%, transparent 51%) !important;
+  background-size: auto, 12px 100% !important;
+}
+
+a.xerius-action--outline {
+  border: 1px solid rgba(255, 104, 28, 0.76) !important;
+  background-color: rgba(7, 20, 38, 0.9) !important;
+  background-image:
+    linear-gradient(135deg, rgba(255, 104, 28, 0.12), transparent 46%),
+    linear-gradient(90deg, transparent 49%, rgba(104, 182, 255, 0.08) 50%, transparent 51%) !important;
+  background-size: auto, 12px 100% !important;
+}
+
+a.xerius-action::before {
+  position: absolute;
+  z-index: 0;
+  inset: -2px;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, 0.32) 46%, transparent 72%);
+  content: "";
+  transform: translateX(-125%) skewX(-12deg);
+  transition: transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a.xerius-action::after {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: -48%;
+  width: 42%;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  content: "";
+  opacity: 0;
+  transition:
+    left 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 180ms ease;
+}
+
+a.xerius-action > span,
+a.xerius-action > svg {
+  position: relative;
+  z-index: 1;
+}
+
+a.xerius-action > span {
+  font-size: inherit;
+  letter-spacing: inherit;
+  transform: none !important;
+}
+
+.cs-hero-signup.xerius-action {
+  width: 174px;
+  padding-inline: 18px;
+}
+
+.cs-hero-action.primary.xerius-action {
+  width: 210px;
+}
+
+@media (max-width: 1180px) {
+  .cs-hero-signup.xerius-action {
+    width: 160px;
+    padding-inline: 14px;
+    font-size: 11px;
+  }
+}
+
+a.xerius-action:hover,
+a.xerius-action:focus-visible {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 10px 16px rgba(255, 104, 28, 0.2));
+  outline: 0;
+}
+
+a.xerius-action:hover::before,
+a.xerius-action:focus-visible::before {
+  transform: translateX(125%) skewX(-12deg);
+}
+
+a.xerius-action:hover::after,
+a.xerius-action:focus-visible::after {
+  left: 106%;
+  opacity: 0.9;
+}
+
+a.xerius-action > svg {
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 260ms ease !important;
+}
+
+a.xerius-action:hover > svg,
+a.xerius-action:focus-visible > svg {
+  transform: translateX(7px);
+}
+
+a.xerius-action--primary:hover,
+a.xerius-action--primary:focus-visible {
+  border-color: #ff8b4c !important;
+  background-color: #ff7a18 !important;
+  color: #07111d !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 -8px 20px rgba(7, 20, 38, 0.08) !important;
+}
+
+a.xerius-action--outline:hover,
+a.xerius-action--outline:focus-visible {
+  border-color: #ff681c !important;
+  background-color: #111e2c !important;
+  color: #fff !important;
+  box-shadow:
+    inset 3px 0 0 #ff681c,
+    inset 0 0 24px rgba(255, 104, 28, 0.08) !important;
+}
+
+a.xerius-action:active {
+  transform: translateY(-1px);
+  transition-duration: 90ms !important;
+}
+
+a.xerius-action:focus-visible {
+  outline: 2px solid #ff8b4c;
+  outline-offset: 4px;
+}
+
+@media (max-width: 1100px) {
+  .x-ticker-frame {
+    grid-template-columns: 175px minmax(0, 1fr);
+  }
+
+  .x-ticker-card {
+    width: 295px;
+  }
+
+  #plateforme .problem-v2-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .cs-matches-strip.xerius-insight-ticker {
+    height: 86px;
+  }
+
+  .x-ticker-frame {
+    width: 100%;
+    grid-template-columns: 112px minmax(0, 1fr);
+  }
+
+  .x-ticker-label {
+    gap: 8px;
+    padding-left: 16px;
+  }
+
+  .x-ticker-label-copy b {
+    font-size: 12px;
+    letter-spacing: 0.8px;
+  }
+
+  .x-ticker-label-copy small {
+    display: none;
+  }
+
+  .x-ticker-card {
+    width: 272px;
+    grid-template-columns: 64px minmax(0, 1fr) 16px;
+    gap: 10px;
+    padding-inline: 14px;
+  }
+
+  .x-ticker-copy strong {
+    font-size: 15px;
+  }
+
+  #plateforme .problem-v2-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #plateforme .problem-v2-item {
+    min-height: 322px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .x-ticker-track {
+    animation: none;
+  }
+
+  .x-ticker-window {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .x-ticker-group[aria-hidden="true"] {
+    display: none;
+  }
+
+  .x-ticker-label-dot,
+  #plateforme .problem-v2-item,
+  #pricing .x-pricing-card[data-plan],
+  a.xerius-action,
+  a.xerius-action::before,
+  a.xerius-action::after,
+  a.xerius-action > svg {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  #pricing .x-pricing-card[data-plan],
+  #pricing .x-pricing-card[data-plan]:hover,
+  #pricing .x-pricing-card[data-plan]:focus-within {
+    transform: none !important;
+  }
+}
